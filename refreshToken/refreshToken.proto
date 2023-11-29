@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package refreshTokenProto;
+
+option go_package = ".;refreshTokenProto";
+
+import "google/protobuf/empty.proto";
+
+service RefreshToken {
+  rpc RefreshToken(TokenRequest) returns (AccessToken) {}
+  rpc DestroyToken(stream TokenRequest) returns (google.protobuf.Empty) {}
+  rpc VerifyAccessToken(TokenRequest) returns (AccessTokenInfo) {}
+}
+
+message TokenRequest {
+  string app_code = 1;
+  string signature = 2;
+  string token = 3;
+}
+
+message AccessToken {
+  string access_token = 1;
+  string payload = 2;
+}
+
+message AccessTokenInfo {
+  uint64 uid = 1;
+  string payload = 2;
+}
