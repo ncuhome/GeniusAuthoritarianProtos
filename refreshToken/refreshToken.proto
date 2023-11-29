@@ -8,7 +8,7 @@ import "google/protobuf/empty.proto";
 
 service RefreshToken {
   rpc RefreshToken(TokenRequest) returns (AccessToken) {}
-  rpc DestroyRefreshToken(stream TokenRequest) returns (google.protobuf.Empty) {}
+  rpc DestroyRefreshToken(TokenRequest) returns (google.protobuf.Empty) {}
   rpc VerifyAccessToken(TokenRequest) returns (AccessTokenInfo) {}
 }
 
