@@ -20,9 +20,9 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	RefreshToken_RefreshToken_FullMethodName      = "/refreshTokenProto.RefreshToken/RefreshToken"
-	RefreshToken_DestroyToken_FullMethodName      = "/refreshTokenProto.RefreshToken/DestroyToken"
-	RefreshToken_VerifyAccessToken_FullMethodName = "/refreshTokenProto.RefreshToken/VerifyAccessToken"
+	RefreshToken_RefreshToken_FullMethodName        = "/refreshTokenProto.RefreshToken/RefreshToken"
+	RefreshToken_DestroyRefreshToken_FullMethodName = "/refreshTokenProto.RefreshToken/DestroyRefreshToken"
+	RefreshToken_VerifyAccessToken_FullMethodName   = "/refreshTokenProto.RefreshToken/VerifyAccessToken"
 )
 
 // RefreshTokenClient is the client API for RefreshToken service.
@@ -30,7 +30,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type RefreshTokenClient interface {
 	RefreshToken(ctx context.Context, in *TokenRequest, opts ...grpc.CallOption) (*AccessToken, error)
-	DestroyToken(ctx context.Context, opts ...grpc.CallOption) (RefreshToken_DestroyTokenClient, error)
+	DestroyRefreshToken(ctx context.Context, opts ...grpc.CallOption) (RefreshToken_DestroyRefreshTokenClient, error)
 	VerifyAccessToken(ctx context.Context, in *TokenRequest, opts ...grpc.CallOption) (*AccessTokenInfo, error)
 }
 
@@ -51,30 +51,30 @@ func (c *refreshTokenClient) RefreshToken(ctx context.Context, in *TokenRequest,
 	return out, nil
 }
 
-func (c *refreshTokenClient) DestroyToken(ctx context.Context, opts ...grpc.CallOption) (RefreshToken_DestroyTokenClient, error) {
-	stream, err := c.cc.NewStream(ctx, &RefreshToken_ServiceDesc.Streams[0], RefreshToken_DestroyToken_FullMethodName, opts...)
+func (c *refreshTokenClient) DestroyRefreshToken(ctx context.Context, opts ...grpc.CallOption) (RefreshToken_DestroyRefreshTokenClient, error) {
+	stream, err := c.cc.NewStream(ctx, &RefreshToken_ServiceDesc.Streams[0], RefreshToken_DestroyRefreshToken_FullMethodName, opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &refreshTokenDestroyTokenClient{stream}
+	x := &refreshTokenDestroyRefreshTokenClient{stream}
 	return x, nil
 }
 
-type RefreshToken_DestroyTokenClient interface {
+type RefreshToken_DestroyRefreshTokenClient interface {
 	Send(*TokenRequest) error
 	CloseAndRecv() (*emptypb.Empty, error)
 	grpc.ClientStream
 }
 
-type refreshTokenDestroyTokenClient struct {
+type refreshTokenDestroyRefreshTokenClient struct {
 	grpc.ClientStream
 }
 
-func (x *refreshTokenDestroyTokenClient) Send(m *TokenRequest) error {
+func (x *refreshTokenDestroyRefreshTokenClient) Send(m *TokenRequest) error {
 	return x.ClientStream.SendMsg(m)
 }
 
-func (x *refreshTokenDestroyTokenClient) CloseAndRecv() (*emptypb.Empty, error) {
+func (x *refreshTokenDestroyRefreshTokenClient) CloseAndRecv() (*emptypb.Empty, error) {
 	if err := x.ClientStream.CloseSend(); err != nil {
 		return nil, err
 	}
@@ -99,7 +99,7 @@ func (c *refreshTokenClient) VerifyAccessToken(ctx context.Context, in *TokenReq
 // for forward compatibility
 type RefreshTokenServer interface {
 	RefreshToken(context.Context, *TokenRequest) (*AccessToken, error)
-	DestroyToken(RefreshToken_DestroyTokenServer) error
+	DestroyRefreshToken(RefreshToken_DestroyRefreshTokenServer) error
 	VerifyAccessToken(context.Context, *TokenRequest) (*AccessTokenInfo, error)
 	mustEmbedUnimplementedRefreshTokenServer()
 }
@@ -111,8 +111,8 @@ type UnimplementedRefreshTokenServer struct {
 func (UnimplementedRefreshTokenServer) RefreshToken(context.Context, *TokenRequest) (*AccessToken, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RefreshToken not implemented")
 }
-func (UnimplementedRefreshTokenServer) DestroyToken(RefreshToken_DestroyTokenServer) error {
-	return status.Errorf(codes.Unimplemented, "method DestroyToken not implemented")
+func (UnimplementedRefreshTokenServer) DestroyRefreshToken(RefreshToken_DestroyRefreshTokenServer) error {
+	return status.Errorf(codes.Unimplemented, "method DestroyRefreshToken not implemented")
 }
 func (UnimplementedRefreshTokenServer) VerifyAccessToken(context.Context, *TokenRequest) (*AccessTokenInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method VerifyAccessToken not implemented")
@@ -148,25 +148,25 @@ func _RefreshToken_RefreshToken_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
-func _RefreshToken_DestroyToken_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(RefreshTokenServer).DestroyToken(&refreshTokenDestroyTokenServer{stream})
+func _RefreshToken_DestroyRefreshToken_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(RefreshTokenServer).DestroyRefreshToken(&refreshTokenDestroyRefreshTokenServer{stream})
 }
 
-type RefreshToken_DestroyTokenServer interface {
+type RefreshToken_DestroyRefreshTokenServer interface {
 	SendAndClose(*emptypb.Empty) error
 	Recv() (*TokenRequest, error)
 	grpc.ServerStream
 }
 
-type refreshTokenDestroyTokenServer struct {
+type refreshTokenDestroyRefreshTokenServer struct {
 	grpc.ServerStream
 }
 
-func (x *refreshTokenDestroyTokenServer) SendAndClose(m *emptypb.Empty) error {
+func (x *refreshTokenDestroyRefreshTokenServer) SendAndClose(m *emptypb.Empty) error {
 	return x.ServerStream.SendMsg(m)
 }
 
-func (x *refreshTokenDestroyTokenServer) Recv() (*TokenRequest, error) {
+func (x *refreshTokenDestroyRefreshTokenServer) Recv() (*TokenRequest, error) {
 	m := new(TokenRequest)
 	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
@@ -210,8 +210,8 @@ var RefreshToken_ServiceDesc = grpc.ServiceDesc{
 	},
 	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "DestroyToken",
-			Handler:       _RefreshToken_DestroyToken_Handler,
+			StreamName:    "DestroyRefreshToken",
+			Handler:       _RefreshToken_DestroyRefreshToken_Handler,
 			ClientStreams: true,
 		},
 	},
