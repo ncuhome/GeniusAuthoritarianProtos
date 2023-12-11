@@ -8,8 +8,11 @@ import "google/protobuf/empty.proto";
 
 service RefreshToken {
   rpc RefreshToken(TokenRequest) returns (AccessToken) {}
+
   rpc DestroyRefreshToken(TokenRequest) returns (google.protobuf.Empty) {}
   rpc VerifyAccessToken(TokenRequest) returns (AccessTokenInfo) {}
+
+  rpc GetUserInfo(TokenRequest) returns (UserInfo) {}
 }
 
 message TokenRequest {
@@ -26,4 +29,11 @@ message AccessToken {
 message AccessTokenInfo {
   uint64 uid = 1;
   string payload = 2;
+}
+
+message UserInfo {
+  uint64 uid = 1;
+  string name = 2;
+  string avatar_url = 3;
+  repeated string groups = 4;
 }

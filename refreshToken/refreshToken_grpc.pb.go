@@ -23,6 +23,7 @@ const (
 	RefreshToken_RefreshToken_FullMethodName        = "/refreshTokenProto.RefreshToken/RefreshToken"
 	RefreshToken_DestroyRefreshToken_FullMethodName = "/refreshTokenProto.RefreshToken/DestroyRefreshToken"
 	RefreshToken_VerifyAccessToken_FullMethodName   = "/refreshTokenProto.RefreshToken/VerifyAccessToken"
+	RefreshToken_GetUserInfo_FullMethodName         = "/refreshTokenProto.RefreshToken/GetUserInfo"
 )
 
 // RefreshTokenClient is the client API for RefreshToken service.
@@ -32,6 +33,7 @@ type RefreshTokenClient interface {
 	RefreshToken(ctx context.Context, in *TokenRequest, opts ...grpc.CallOption) (*AccessToken, error)
 	DestroyRefreshToken(ctx context.Context, in *TokenRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	VerifyAccessToken(ctx context.Context, in *TokenRequest, opts ...grpc.CallOption) (*AccessTokenInfo, error)
+	GetUserInfo(ctx context.Context, in *TokenRequest, opts ...grpc.CallOption) (*UserInfo, error)
 }
 
 type refreshTokenClient struct {
@@ -69,6 +71,15 @@ func (c *refreshTokenClient) VerifyAccessToken(ctx context.Context, in *TokenReq
 	return out, nil
 }
 
+func (c *refreshTokenClient) GetUserInfo(ctx context.Context, in *TokenRequest, opts ...grpc.CallOption) (*UserInfo, error) {
+	out := new(UserInfo)
+	err := c.cc.Invoke(ctx, RefreshToken_GetUserInfo_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // RefreshTokenServer is the server API for RefreshToken service.
 // All implementations must embed UnimplementedRefreshTokenServer
 // for forward compatibility
@@ -76,6 +87,7 @@ type RefreshTokenServer interface {
 	RefreshToken(context.Context, *TokenRequest) (*AccessToken, error)
 	DestroyRefreshToken(context.Context, *TokenRequest) (*emptypb.Empty, error)
 	VerifyAccessToken(context.Context, *TokenRequest) (*AccessTokenInfo, error)
+	GetUserInfo(context.Context, *TokenRequest) (*UserInfo, error)
 	mustEmbedUnimplementedRefreshTokenServer()
 }
 
@@ -91,6 +103,9 @@ func (UnimplementedRefreshTokenServer) DestroyRefreshToken(context.Context, *Tok
 }
 func (UnimplementedRefreshTokenServer) VerifyAccessToken(context.Context, *TokenRequest) (*AccessTokenInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method VerifyAccessToken not implemented")
+}
+func (UnimplementedRefreshTokenServer) GetUserInfo(context.Context, *TokenRequest) (*UserInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserInfo not implemented")
 }
 func (UnimplementedRefreshTokenServer) mustEmbedUnimplementedRefreshTokenServer() {}
 
@@ -159,6 +174,24 @@ func _RefreshToken_VerifyAccessToken_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _RefreshToken_GetUserInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TokenRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RefreshTokenServer).GetUserInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: RefreshToken_GetUserInfo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RefreshTokenServer).GetUserInfo(ctx, req.(*TokenRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // RefreshToken_ServiceDesc is the grpc.ServiceDesc for RefreshToken service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -177,6 +210,10 @@ var RefreshToken_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "VerifyAccessToken",
 			Handler:    _RefreshToken_VerifyAccessToken_Handler,
+		},
+		{
+			MethodName: "GetUserInfo",
+			Handler:    _RefreshToken_GetUserInfo_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
