@@ -7,8 +7,9 @@ option go_package = ".;appProto";
 import "google/protobuf/empty.proto";
 
 service App {
-  rpc TokenStatus(TokenRequest) returns (TokenStatus) {}
+  rpc GetTokenStatus(TokenRequest) returns (TokenStatus) {}
   rpc DestroyToken(TokenRequest) returns (google.protobuf.Empty) {}
+  rpc GetUserInfo(TokenRequest) returns (UserInfo) {}
 }
 
 message TokenRequest {
