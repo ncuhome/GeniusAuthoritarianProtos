@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package appProto;
+
+option go_package = ".;appProto";
+
+import "google/protobuf/empty.proto";
+
+service App {
+  rpc TokenStatus(TokenRequest) returns (TokenStatus) {}
+  rpc DestroyToken(TokenRequest) returns (google.protobuf.Empty) {}
+}
+
+message TokenRequest {
+  uint64 id = 1;
+}
+
+message TokenStatus {
+  bool valid = 1;
+}
+
+message UserInfo {
+  uint64 uid = 1;
+  string name = 2;
+  string avatar_url = 3;
+  repeated string groups = 4;
+}
