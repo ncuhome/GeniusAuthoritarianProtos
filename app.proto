@@ -8,6 +8,7 @@ import "google/protobuf/empty.proto";
 
 service App {
   rpc GetTokenStatus(TokenRequest) returns (TokenStatus) {}
+  rpc GetTokenCanceled(google.protobuf.Empty) returns (stream TokenCanceled) {}
   rpc DestroyToken(TokenRequest) returns (google.protobuf.Empty) {}
   rpc GetUserInfo(TokenRequest) returns (UserInfo) {}
 }
@@ -18,6 +19,10 @@ message TokenRequest {
 
 message TokenStatus {
   bool valid = 1;
+}
+
+message TokenCanceled {
+  repeated uint64 id = 1;
 }
 
 message UserInfo {
