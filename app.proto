@@ -7,14 +7,22 @@ option go_package = ".;appProto";
 import "google/protobuf/empty.proto";
 
 service App {
-  rpc GetTokenStatus(TokenRequest) returns (TokenStatus) {}
+  rpc GetTokenStatus(TokenIDRequest) returns (TokenStatus) {}
   rpc GetTokenCanceled(google.protobuf.Empty) returns (stream TokenCanceled) {}
-  rpc DestroyToken(Token) returns (google.protobuf.Empty) {}
-  rpc GetUserInfo(TokenRequest) returns (UserInfo) {}
+  rpc DestroyToken(RefreshTokenRequest) returns (google.protobuf.Empty) {}
+  rpc GetUserInfo(UserIDRequest) returns (UserInfo) {}
 }
 
-message TokenRequest {
+message TokenIDRequest {
   uint64 id = 1;
+}
+
+message UserIDRequest {
+  uint64 id = 1;
+}
+
+message RefreshTokenRequest {
+  string Token = 1;
 }
 
 message TokenStatus {
@@ -23,10 +31,6 @@ message TokenStatus {
 
 message TokenCanceled {
   repeated uint64 id = 1;
-}
-
-message Token {
-  string Token = 1;
 }
 
 message UserInfo {
