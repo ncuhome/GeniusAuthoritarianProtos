@@ -34,9 +34,14 @@ message UserOperationID {
   uint64 operation_id = 2;
 }
 
+message CanceledToken {
+  uint64 id = 1;
+  int64  valid_before = 2;
+}
+
 message TokenOperation {
   repeated UserOperationID user_operation = 1;
-  repeated uint64 canceled_token_id = 2;
+  repeated CanceledToken canceled_token = 2;
 }
 
 message UserInfo {
